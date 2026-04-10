@@ -12,7 +12,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/api/status-page': {
+      '/api/status-page/ets2la': {
         target: 'https://uptime.ets2la.cn',
         changeOrigin: true,
         secure: true,

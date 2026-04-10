@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import ThemeToggle from '@/components/ThemeToggle.vue'
+import Announcement from '@/components/Announcement.vue'
 import { FlipCard } from '@/components/ui/flip-card'
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect'
-import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle as UIDialogTitle } from '@/components/ui/dialog'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { StarsBackground } from '@/components/ui/bg-stars'
 import ServiceStatus from '@/components/ServiceStatus.vue'
 import MachineStatus from '@/components/MachineStatus.vue'
 import { Dock, DockIcon, DockSeparator } from '@/components/ui/dock'
+import { Heart, Info, Coffee, Globe } from 'lucide-vue-next'
 import { computed, ref, onMounted } from 'vue'
 import { useColorMode, usePreferredDark } from '@vueuse/core'
 
@@ -43,6 +45,13 @@ onMounted(() => {
     <section class="mx-auto max-w-[130rem] px-8 py-20 flex flex-col items-center text-center">
       <div class="w-full flex justify-end mb-6">
         <Dock class="mb-0">
+          <!-- 公告组件 -->
+          <DockIcon>
+            <div class="size-full flex items-center justify-center">
+              <Announcement />
+            </div>
+          </DockIcon>
+          <DockSeparator />
           <!-- 背景切换按钮（主题切换） -->
           <DockIcon>
             <div class="size-full flex items-center justify-center">
@@ -190,6 +199,99 @@ onMounted(() => {
           </div>
         </a>
       </div>
+
+    <!-- 赞助支持 -->
+    <section class="mx-auto max-w-[130rem] px-8 pb-20 flex flex-col items-center text-center relative z-10">
+      <div class="mt-10 w-full max-w-[90rem]">
+        <Card class="bg-card text-card-foreground overflow-hidden">
+          <CardHeader>
+            <CardTitle class="flex items-center justify-center gap-2">
+              <Heart class="size-6 text-red-500 fill-red-500" />
+              赞助支持
+            </CardTitle>
+          </CardHeader>
+          <CardContent class="flex flex-col items-center gap-8">
+            <p class="text-muted-foreground text-lg max-w-3xl">
+              如果您希望支持 ETS2LA 国内镜像站的持续运行，请考虑以下赞助方案：
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
+              <!-- 方案一 -->
+              <Dialog>
+                <DialogTrigger as-child>
+                  <div class="p-8 rounded-2xl border bg-muted/30 flex flex-col items-center gap-4 transition-all hover:bg-muted/50 hover:scale-[1.02] cursor-pointer group">
+                    <div class="p-3 bg-primary/10 rounded-xl text-primary group-hover:bg-primary/20 transition-colors">
+                      <Coffee class="size-8" />
+                    </div>
+                    <h4 class="font-bold text-xl">方案一：给晚安买杯咖啡</h4>
+                    <p class="text-muted-foreground">可在文档站中添加赞助人信息</p>
+                    <div class="mt-2 text-primary font-medium flex items-center gap-2">
+                      <span>点击查看赞助码</span>
+                      <Info class="size-4" />
+                    </div>
+                  </div>
+                </DialogTrigger>
+                <DialogContent class="sm:max-w-[600px]">
+                  <DialogHeader>
+                    <UIDialogTitle>方案一：给晚安买杯咖啡</UIDialogTitle>
+                  </DialogHeader>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                    <div class="flex flex-col items-center gap-2">
+                      <img src="/sponsored/9-vx.png" alt="微信赞助" class="w-full rounded-lg border shadow-sm" />
+                      <span class="text-sm font-medium">微信支付</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-2">
+                      <img src="/sponsored/9-alipay.jpg" alt="支付宝赞助" class="w-full rounded-lg border shadow-sm" />
+                      <span class="text-sm font-medium">支付宝支付</span>
+                    </div>
+                  </div>
+                  <div class="mt-4 p-4 rounded-lg bg-muted text-sm text-center">
+                    <p>赞助时请备注<span class="font-bold">昵称</span></p>
+                    <p class="mt-1">以便我们及时为您在文档站中添加信息</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
+
+              <!-- 方案二 -->
+              <Dialog>
+                <DialogTrigger as-child>
+                  <div class="p-8 rounded-2xl border bg-muted/30 flex flex-col items-center gap-4 transition-all hover:bg-muted/50 hover:scale-[1.02] cursor-pointer group">
+                    <div class="p-3 bg-yellow-500/10 rounded-xl text-yellow-500 group-hover:bg-yellow-500/20 transition-colors">
+                      <Globe class="size-8" />
+                    </div>
+                    <h4 class="font-bold text-xl">方案二：可视化加速访问</h4>
+                    <p class="text-muted-foreground">使用单独域名访问环境可视化，体验极速加速</p>
+                    <div class="mt-2 text-yellow-600 dark:text-yellow-400 font-medium flex items-center gap-2">
+                      <span>点击查看赞助码</span>
+                      <Info class="size-4" />
+                    </div>
+                  </div>
+                </DialogTrigger>
+                <DialogContent class="sm:max-w-[400px]">
+                  <DialogHeader>
+                    <UIDialogTitle>方案二：可视化加速访问</UIDialogTitle>
+                  </DialogHeader>
+                  <div class="flex flex-col items-center gap-4 mt-4">
+                    <img src="/sponsored/keshihuajiasuzanzhu.jpg" alt="加速赞助" class="w-full rounded-lg border shadow-sm" />
+                    <span class="text-sm font-medium">支付宝支付</span>
+                  </div>
+                  <div class="mt-4 p-4 rounded-lg bg-muted text-sm text-center">
+                    <p>赞助时请备注<span class="font-bold">所在省份、昵称以及联系方式</span></p>
+                    <p class="mt-1">晚安将为您单独开通阿里云机器（三线峰值 200mbps）</p>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            <div class="flex flex-col items-center gap-2">
+              <p class="text-sm text-muted-foreground">
+                如有任何疑问，请联系提供者：<span class="text-primary font-bold">晚安（QQ：1804832964），如需其他金额请手动联系晚安</span>
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </section>
 
       <!-- Flip Card Gallery moved below feature row -->
       <div class="mt-12 w-full max-w-[90rem] relative z-10">
