@@ -54,7 +54,6 @@ async function refresh(initial = false) {
   let lastErr: any = null
   let successUrl = ''
 
-  // Fetch Status Page Config
   for (const url of attempts) {
     try {
       await fetchUrl(url)
@@ -70,22 +69,17 @@ async function refresh(initial = false) {
   if (!success) {
     error.value = lastErr?.message ?? '无法获取状态页数据'
   } else {
-    // Fetch Heartbeats
-    // Derive heartbeat URL from successUrl
-    // e.g. .../api/status-page/ets2la -> .../api/status-page/heartbeat/ets2la
     let hbUrl = ''
     if (successUrl.includes('/api/status-page/')) {
       hbUrl = successUrl.replace('/api/status-page/', '/api/status-page/heartbeat/')
     } else {
-      // Fallback if structure is weird
       hbUrl = 'https://uptime.ets2la.cn/api/status-page/heartbeat/ets2la'
     }
-    
+
     try {
       await fetchHeartbeat(hbUrl)
     } catch (e) {
       console.warn('Failed to fetch heartbeats:', e)
-      // Don't fail the whole component, just status might be stale/gray
     }
   }
 
@@ -116,32 +110,59 @@ function getMonitorStatus(m: MonitorItem): number | undefined {
   if (!heartbeats.value || !m.id) return undefined
   const list = heartbeats.value.heartbeatList[m.id.toString()]
   if (Array.isArray(list) && list.length > 0) {
-    // The last item is usually the latest
     return list[list.length - 1]?.status
   }
   return undefined
 }
 
-function statusClass(m: MonitorItem) {
+function statusInfo(m: MonitorItem) {
   const s = getMonitorStatus(m)
-  if (s === 1) return 'bg-emerald-500'
-  if (s === 0) return 'bg-red-500'
-  
+  if (s === 1) return { class: 'bg-emerald-500', label: '正常', textClass: 'text-emerald-600 dark:text-emerald-400' }
+  if (s === 0) return { class: 'bg-red-500', label: '异常', textClass: 'text-red-600 dark:text-red-400' }
+
   const v = typeof m?.validCert === 'boolean' ? m.validCert : null
-  if (v === true) return 'bg-emerald-500'
-  if (v === false) return 'bg-red-500'
-  return 'bg-muted-foreground/30'
+  if (v === true) return { class: 'bg-emerald-500', label: '正常', textClass: 'text-emerald-600 dark:text-emerald-400' }
+  if (v === false) return { class: 'bg-red-500', label: '证书过期', textClass: 'text-red-600 dark:text-red-400' }
+  return { class: 'bg-yellow-500', label: '未知', textClass: 'text-yellow-600 dark:text-yellow-400' }
+}
+
+function certText(m: MonitorItem) {
+  if (typeof m?.certExpiryDaysRemaining !== 'number') return null
+  const days = m.certExpiryDaysRemaining
+  if (days < 0) return { text: `已过期 ${Math.abs(days)} 天`, warning: true }
+  if (days < 30) return { text: `证书 ${days} 天后过期`, warning: true }
+  return { text: `证书 ${days} 天`, warning: false }
 }
 </script>
 
 <template>
-  <div>
-    <div v-if="loading" class="text-sm text-muted-foreground">正在加载服务状态…</div>
+  <div class="space-y-4">
+    <!-- 错误提示 -->
+    <div v-if="error" class="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-sm text-red-600 dark:text-red-400">
+      {{ error }}
+    </div>
+
+    <!-- 加载状态 -->
+    <div v-if="loading" class="flex items-center justify-center py-8">
+      <div class="flex items-center gap-3 text-muted-foreground">
+        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>正在加载服务状态...</span>
+      </div>
+    </div>
+
+    <!-- 服务列表 -->
     <div v-else>
-      <div v-if="error" class="mb-2 text-xs text-red-600">无法加载服务状态：{{ error }}。仍显示最近一次数据</div>
-      <div class="mb-2 text-xs text-muted-foreground">最近更新：{{ lastUpdated }}</div>
-      <div v-for="group in (data?.publicGroupList ?? data?.groupList ?? [])" :key="group?.name" class="mb-4">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <div v-for="group in (data?.publicGroupList ?? data?.groupList ?? [])" :key="group?.name" class="space-y-3">
+        <!-- 分组标题 -->
+        <div v-if="group?.name" class="text-sm font-medium text-muted-foreground px-1">
+          {{ group.name }}
+        </div>
+
+        <!-- 服务卡片列表 -->
+        <div class="space-y-2">
           <component
             :is="m.url ? 'a' : 'div'"
             v-for="m in (group?.monitorList ?? [])"
@@ -149,27 +170,42 @@ function statusClass(m: MonitorItem) {
             :href="m.url"
             :target="m.url ? '_blank' : undefined"
             :rel="m.url ? 'noopener noreferrer' : undefined"
-            class="rounded-lg border bg-white/60 dark:bg-neutral-900/50 p-3 flex items-center justify-between gap-4 transition-colors"
-            :class="{ 'hover:bg-muted/50 cursor-pointer': !!m.url }"
+            class="group flex items-center gap-4 p-4 rounded-2xl border bg-muted/30 hover:bg-muted/50 transition-all"
+            :class="{ 'cursor-pointer': !!m.url }"
           >
-            <div class="text-sm flex-1 pl-1 text-center">
-              <div class="font-medium">{{ m?.name ?? '未命名服务' }}</div>
-              <div class="text-xs text-muted-foreground mt-1">
-                <span v-if="typeof m?.certExpiryDaysRemaining === 'number'">
-                  证书剩余：{{ m.certExpiryDaysRemaining >= 0 ? m.certExpiryDaysRemaining : `已过期${Math.abs(m.certExpiryDaysRemaining)}` }} 天
-                </span>
-                <span v-else>证书剩余：未知</span>
+            <!-- 状态指示器 -->
+            <div class="flex-shrink-0">
+              <span class="block h-3 w-3 rounded-full" :class="statusInfo(m).class"></span>
+            </div>
+
+            <!-- 服务名称 -->
+            <div class="flex-1 min-w-0">
+              <div class="font-medium truncate">{{ m?.name ?? '未命名服务' }}</div>
+              <div v-if="certText(m)" class="text-xs mt-0.5" :class="certText(m)?.warning ? 'text-yellow-600 dark:text-yellow-400' : 'text-muted-foreground'">
+                {{ certText(m)?.text }}
               </div>
             </div>
-            <div class="w-[240px] flex items-center justify-end">
-              <span class="h-3 w-3 rounded-full" :class="statusClass(m)"></span>
+
+            <!-- 状态标签 -->
+            <div class="flex-shrink-0">
+              <span class="text-sm font-medium px-2.5 py-1 rounded-full" :class="statusInfo(m).textClass + ' bg-current/10'">
+                {{ statusInfo(m).label }}
+              </span>
             </div>
+
+            <!-- 外部链接图标 -->
+            <svg v-if="m.url" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 text-muted-foreground/50 group-hover:text-muted-foreground transition-colors">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+              <polyline points="15 3 21 3 21 9" />
+              <line x1="10" x2="21" y1="14" y2="3" />
+            </svg>
           </component>
         </div>
       </div>
-      <div class="mt-3 text-sm text-muted-foreground">
-        该页面显示的状态只是预览，并非完全正确，详情信息请访问状态页查看
-        <a :href="props.statusPageUrl" target="_blank" rel="noopener noreferrer" class="underline">状态页</a>
+
+      <!-- 更新时间 -->
+      <div class="mt-4 pt-4 border-t text-xs text-muted-foreground text-center">
+        最近更新：{{ lastUpdated }} · <a :href="props.statusPageUrl" target="_blank" rel="noopener noreferrer" class="underline hover:text-foreground">查看完整状态页</a>
       </div>
     </div>
   </div>

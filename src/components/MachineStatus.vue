@@ -116,11 +116,11 @@ function seedNodes(arr: any[]) {
   }
 }
 
-function nodeDotClass(n: any) {
+function nodeStatusInfo(n: any) {
   const v = typeof n?.online === 'boolean' ? n.online : null
-  if (v === true) return 'bg-emerald-500'
-  if (v === false) return 'bg-red-500'
-  return 'bg-muted-foreground/30'
+  if (v === true) return { class: 'bg-emerald-500', label: '在线', textClass: 'text-emerald-600 dark:text-emerald-400', dotClass: 'bg-emerald-500' }
+  if (v === false) return { class: 'bg-red-500', label: '离线', textClass: 'text-red-600 dark:text-red-400', dotClass: 'bg-red-500' }
+  return { class: 'bg-yellow-500', label: '未知', textClass: 'text-yellow-600 dark:text-yellow-400', dotClass: 'bg-yellow-500' }
 }
 
 function formatBytes(n?: number) {
@@ -131,62 +131,56 @@ function formatBytes(n?: number) {
   while (v >= 1024 && i < units.length - 1) { v /= 1024; i++ }
   return `${v.toFixed(v >= 100 ? 0 : v >= 10 ? 1 : 2)} ${units[i]}`
 }
+
 function percent(a?: number, b?: number) {
   if (typeof a !== 'number' || typeof b !== 'number' || !isFinite(a) || !isFinite(b) || b <= 0) return null
   const p = (a / b) * 100
   return clampPercent(p)
 }
+
 function clampPercent(x?: number | null) {
   if (typeof x !== 'number' || !isFinite(x)) return null
   return Math.max(0, Math.min(100, x))
 }
+
 function round2(x?: number | null) {
   const v = clampPercent(x)
   if (v === null) return null
   return Math.round(v * 100) / 100
 }
 
-function nodeTrafficText(n: any) {
-  const up = typeof n?.tx_bytes === 'number' ? n.tx_bytes : getNestedNumber(n, 'network.totalUp')
-  const down = typeof n?.rx_bytes === 'number' ? n.rx_bytes : getNestedNumber(n, 'network.totalDown')
-  const a = formatBytes(up)
-  const b = formatBytes(down)
-  if (a === '未知' && b === '未知') return '流量：未知'
-  return `流量：上传 ${a} · 下载 ${b}`
+function getCpuUsage(n: any) {
+  const cpuRaw = typeof n?.cpu_usage === 'number' ? n.cpu_usage : getNestedNumber(n, 'cpu.usage')
+  return round2(cpuRaw)
 }
 
-function nodeUsageText(n: any) {
-  // CPU 按照你的要求：ws 返回的值直接视为百分比，不做乘 100
-  const cpuRaw = typeof n?.cpu_usage === 'number' ? n.cpu_usage : getNestedNumber(n, 'cpu.usage')
-  const cpuP = round2(cpuRaw)
-  const memP = round2(
+function getMemPercent(n: any) {
+  return round2(
     percent(
       typeof n?.mem_used === 'number' ? n.mem_used : getNestedNumber(n, 'ram.used'),
       typeof n?.mem_total === 'number' ? n.mem_total : getNestedNumber(n, 'ram.total')
     ) ?? undefined
   )
-  const diskP = round2(
+}
+
+function getDiskPercent(n: any) {
+  return round2(
     percent(
       typeof n?.disk_used === 'number' ? n.disk_used : getNestedNumber(n, 'disk.used'),
       typeof n?.disk_total === 'number' ? n.disk_total : getNestedNumber(n, 'disk.total')
     ) ?? undefined
   )
-  const fmt = (v: number | null) => (v !== null ? `${v.toFixed(2)}%` : '未知')
-  const parts: string[] = []
-  parts.push(`CPU ${fmt(cpuP)}`)
-  parts.push(`内存 ${fmt(memP)}`)
-  parts.push(`磁盘 ${fmt(diskP)}`)
-  return `占用率：` + parts.join(' · ')
 }
 
-function nodeUptimeText(n: any) {
+function formatUptime(n: any) {
   const sec = typeof n?.uptime === 'number' ? n.uptime : getNestedNumber(n, 'uptime')
-  if (typeof sec !== 'number' || !isFinite(sec) || sec < 0) return '在线时间：未知'
+  if (typeof sec !== 'number' || !isFinite(sec) || sec < 0) return null
   const d = Math.floor(sec / 86400)
   const h = Math.floor((sec % 86400) / 3600)
   const m = Math.floor((sec % 3600) / 60)
-  const s = Math.floor(sec % 60)
-  return `在线时间：${d}天${h}小时${m}分钟${s}秒`
+  if (d > 0) return `${d}天 ${h}小时`
+  if (h > 0) return `${h}小时 ${m}分钟`
+  return `${m}分钟`
 }
 
 function normalizeClient(c: any) {
@@ -217,25 +211,108 @@ function upsertClients(list: any[]) {
 </script>
 
 <template>
-  <div>
-    <div v-if="nodesError" class="mb-2 text-xs text-red-600">无法加载机器状态：{{ nodesError }}。仍显示最近一次数据</div>
-    <div class="mb-2 text-xs text-muted-foreground">最近更新：{{ nodesUpdated }}</div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-      <div v-for="n in nodes" :key="n?.uuid ?? n?.name ?? Math.random()" class="rounded-lg border bg-white/60 dark:bg-neutral-900/50 p-3 flex items-center justify-between gap-4">
-        <div class="text-sm flex-1 pl-1 text-center">
-          <div class="font-medium">{{ n?.name ?? '未命名节点' }}</div>
-          <div class="text-xs text-muted-foreground mt-1">{{ nodeTrafficText(n) }}</div>
-          <div class="text-xs text-muted-foreground mt-1">{{ nodeUsageText(n) }}</div>
-          <div class="text-xs text-muted-foreground mt-1">{{ nodeUptimeText(n) }}</div>
+  <div class="space-y-4">
+    <!-- 错误提示 -->
+    <div v-if="nodesError" class="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-sm text-red-600 dark:text-red-400">
+      {{ nodesError }}
+    </div>
+
+    <!-- 加载状态 -->
+    <div v-if="nodes.length === 0 && !nodesError" class="flex items-center justify-center py-8">
+      <div class="flex items-center gap-3 text-muted-foreground">
+        <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>正在加载机器状态...</span>
+      </div>
+    </div>
+
+    <!-- 节点列表 -->
+    <div v-else class="space-y-3">
+      <div
+        v-for="n in nodes"
+        :key="n?.uuid ?? n?.name ?? Math.random()"
+        class="p-4 rounded-2xl border bg-muted/30"
+      >
+        <!-- 节点头部 -->
+        <div class="flex items-center gap-3 mb-3">
+          <span class="h-2.5 w-2.5 rounded-full flex-shrink-0" :class="nodeStatusInfo(n).dotClass"></span>
+          <span class="font-medium truncate">{{ n?.name ?? '未命名节点' }}</span>
+          <span class="text-xs px-2 py-0.5 rounded-full ml-auto" :class="nodeStatusInfo(n).textClass + ' bg-current/10'">
+            {{ nodeStatusInfo(n).label }}
+          </span>
         </div>
-        <div class="w-[240px] flex items-center justify-end">
-          <span class="h-3 w-3 rounded-full" :class="nodeDotClass(n)"></span>
+
+        <!-- 资源使用率 -->
+        <div class="grid grid-cols-3 gap-2 text-xs">
+          <div class="flex flex-col gap-1">
+            <div class="text-muted-foreground">CPU</div>
+            <div class="flex items-center gap-2">
+              <div class="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+                <div
+                  class="h-full rounded-full transition-all"
+                  :class="{
+                    'bg-emerald-500': (getCpuUsage(n) ?? 0) < 60,
+                    'bg-yellow-500': (getCpuUsage(n) ?? 0) >= 60 && (getCpuUsage(n) ?? 0) < 85,
+                    'bg-red-500': (getCpuUsage(n) ?? 0) >= 85
+                  }"
+                  :style="{ width: Math.min(getCpuUsage(n) ?? 0, 100) + '%' }"
+                ></div>
+              </div>
+              <span class="w-10 text-right font-medium">{{ getCpuUsage(n)?.toFixed(0) ?? '--' }}%</span>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <div class="text-muted-foreground">内存</div>
+            <div class="flex items-center gap-2">
+              <div class="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+                <div
+                  class="h-full rounded-full transition-all"
+                  :class="{
+                    'bg-emerald-500': (getMemPercent(n) ?? 0) < 60,
+                    'bg-yellow-500': (getMemPercent(n) ?? 0) >= 60 && (getMemPercent(n) ?? 0) < 85,
+                    'bg-red-500': (getMemPercent(n) ?? 0) >= 85
+                  }"
+                  :style="{ width: Math.min(getMemPercent(n) ?? 0, 100) + '%' }"
+                ></div>
+              </div>
+              <span class="w-10 text-right font-medium">{{ getMemPercent(n)?.toFixed(0) ?? '--' }}%</span>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1">
+            <div class="text-muted-foreground">磁盘</div>
+            <div class="flex items-center gap-2">
+              <div class="flex-1 h-1.5 bg-muted rounded-full overflow-hidden">
+                <div
+                  class="h-full rounded-full transition-all"
+                  :class="{
+                    'bg-emerald-500': (getDiskPercent(n) ?? 0) < 60,
+                    'bg-yellow-500': (getDiskPercent(n) ?? 0) >= 60 && (getDiskPercent(n) ?? 0) < 85,
+                    'bg-red-500': (getDiskPercent(n) ?? 0) >= 85
+                  }"
+                  :style="{ width: Math.min(getDiskPercent(n) ?? 0, 100) + '%' }"
+                ></div>
+              </div>
+              <span class="w-10 text-right font-medium">{{ getDiskPercent(n)?.toFixed(0) ?? '--' }}%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 流量和运行时 -->
+        <div class="mt-3 pt-3 border-t border-muted/50 flex items-center justify-between text-xs text-muted-foreground">
+          <span>
+            上传 {{ formatBytes(n?.tx_bytes ?? getNestedNumber(n, 'network.totalUp')) }} /
+            下载 {{ formatBytes(n?.rx_bytes ?? getNestedNumber(n, 'network.totalDown')) }}
+          </span>
+          <span v-if="formatUptime(n)">在线 {{ formatUptime(n) }}</span>
         </div>
       </div>
     </div>
-    <div class="mt-3 text-sm text-muted-foreground">
-      获取机器状态详细信息可前往
-      <a :href="props.nodeApiBase" target="_blank" rel="noopener noreferrer" class="underline">探针页面</a>
+
+    <!-- 更新时间 -->
+    <div class="mt-4 pt-4 border-t text-xs text-muted-foreground text-center">
+      最近更新：{{ nodesUpdated }} · <a :href="props.nodeApiBase" target="_blank" rel="noopener noreferrer" class="underline hover:text-foreground">查看完整探针页面</a>
     </div>
   </div>
 </template>
