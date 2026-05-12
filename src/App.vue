@@ -60,6 +60,21 @@ const previewImages = [
 
 <template>
   <main class="relative min-h-screen bg-background text-foreground">
+    <!-- 固定右侧推广链接 -->
+    <a
+      href="https://www.rainyun.com/Mjg2Njg0_"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="fixed right-4 top-2/3 -translate-y-1/2 z-50 hover:opacity-80 transition-opacity"
+      aria-label="雨云推广"
+    >
+      <img
+        src="/sponsored/rainyun.png"
+        alt="雨云"
+        class="w-80 sm:w-96 rounded-xl shadow-2xl"
+      />
+    </a>
+
     <!-- 星空背景 -->
     <StarsBackground
       :factor="0.05"
