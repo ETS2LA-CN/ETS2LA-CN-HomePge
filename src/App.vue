@@ -24,7 +24,7 @@ const imgBase = computed(() => (isDark.value ? '/show/flip_card/black' : '/show/
 // 导航链接
 const navLinks = [
   { label: '文档', href: 'https://docs.ets2la.cn', external: true },
-  { label: '下载', href: 'https://download.ets2la.cn/downloads', external: true },
+  { label: '下载', href: 'https://download.ets2la.cn', external: true },
   { label: '社区', href: 'https://www.kookapp.cn/app/invite/VZaUPP', external: true },
 ]
 
