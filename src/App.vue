@@ -38,7 +38,7 @@ const featureCards = [
   {
     title: '下载中心',
     description: '使用国内镜像快速完成插件/软件的下载',
-    href: 'https://download.ets2la.cn/downloads',
+    href: 'https://download.ets2la.cn',
   },
   {
     title: '社区支持',
