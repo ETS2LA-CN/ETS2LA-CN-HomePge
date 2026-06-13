@@ -43,7 +43,6 @@ const props = withDefaults(defineProps<DockProps>(), {
   orientation: "horizontal",
 });
 
-const dockRef = ref<HTMLElement | null>(null);
 const mouseX = ref(Infinity);
 const mouseY = ref(Infinity);
 const magnification = computed(() => props.magnification);

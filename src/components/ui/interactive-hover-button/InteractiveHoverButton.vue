@@ -44,7 +44,6 @@
 
 <script lang="ts" setup>
 import { cn } from "@/lib/utils";
-import { ref } from "vue";
 
 interface Props {
   text?: string;
@@ -54,7 +53,6 @@ const props = withDefaults(defineProps<Props>(), {
   text: "Button",
 });
 
-const buttonRef = ref<HTMLButtonElement>();
 </script>
 
 <style></style>
