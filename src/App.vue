@@ -259,7 +259,7 @@ const previewImages = [
     </section>
 
     <!-- 赞助支持 -->
-    <section class="relative z-10 mx-auto max-w-6xl px-6 pb-16">
+    <section v-if="false" class="relative z-10 mx-auto max-w-6xl px-6 pb-16">
       <div class="rounded-3xl border bg-card p-8">
         <div class="text-center mb-8">
           <h2 class="text-2xl font-bold mb-2">赞助支持</h2>
