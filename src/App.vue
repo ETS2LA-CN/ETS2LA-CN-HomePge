@@ -2,7 +2,7 @@
 import ThemeToggle from '@/components/ThemeToggle.vue'
 import Announcement from '@/components/Announcement.vue'
 import { TextGenerateEffect } from '@/components/ui/text-generate-effect'
-import { Dialog, DialogTrigger, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogTrigger, DialogContent, DialogHeader } from '@/components/ui/dialog'
 import { CardTitle } from '@/components/ui/card'
 import { StarsBackground } from '@/components/ui/bg-stars'
 import ServiceStatus from '@/components/ServiceStatus.vue'
@@ -26,9 +26,7 @@ const currentVersion = 'ETS2LA C# v3.4.13'
 
 // 导航链接
 const navLinks = [
-  { label: '文档', href: 'https://docs.ets2la.cn', external: true },
-  { label: '下载', href: 'https://download.ets2la.cn', external: true },
-  { label: '社区', href: 'https://www.kookapp.cn/app/invite/VZaUPP', external: true },
+  { label: '文档', href: 'https://docs.ets2la.cn/version/v3/', external: true },
 ]
 
 // 功能卡片数据
@@ -36,17 +34,7 @@ const featureCards = [
   {
     title: '快速上手',
     description: '查看文档并在数分钟内完成插件/软件的安装',
-    href: 'https://docs.ets2la.cn',
-  },
-  {
-    title: '下载中心',
-    description: '使用国内镜像快速完成插件/软件的下载',
-    href: 'https://download.ets2la.cn',
-  },
-  {
-    title: '社区支持',
-    description: '加入社区，获取帮助并分享你的想法',
-    href: 'https://www.kookapp.cn/app/invite/VZaUPP',
+    href: 'https://docs.ets2la.cn/version/v3',
   },
 ]
 
@@ -99,30 +87,102 @@ const previewImages = [
             >
               {{ link.label }}
             </a>
+            <Dialog>
+              <DialogTrigger as-child>
+                <button class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                  下载
+                </button>
+              </DialogTrigger>
+              <DialogContent class="sm:max-w-md">
+                <DialogHeader>
+                  <CardTitle>选择下载方式</CardTitle>
+                </DialogHeader>
+                <p class="text-sm text-muted-foreground mt-2">
+                  请选择你想使用的下载源：
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                  <a
+                    href="https://cnb.cool/ETS2LA-CN/Euro-Truck-Simulator-2-Lane-Assist/-/releases/latest"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all hover:shadow-lg hover:shadow-black/5"
+                  >
+                    <div class="p-3 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                      <Github class="size-6" />
+                    </div>
+                    <div class="text-center">
+                      <h4 class="font-semibold group-hover:text-primary transition-colors">CNB 镜像</h4>
+                      <p class="text-xs text-muted-foreground mt-1">国内镜像，下载更快</p>
+                    </div>
+                  </a>
+                  <a
+                    href="https://github.com/ETS2LA/ETS2LA/releases/latest"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all hover:shadow-lg hover:shadow-black/5"
+                  >
+                    <div class="p-3 rounded-xl bg-foreground/5 text-foreground">
+                      <Github class="size-6" />
+                    </div>
+                    <div class="text-center">
+                      <h4 class="font-semibold group-hover:text-primary transition-colors">GitHub</h4>
+                      <p class="text-xs text-muted-foreground mt-1">官方仓库</p>
+                    </div>
+                  </a>
+                </div>
+              </DialogContent>
+            </Dialog>
+            <Dialog>
+              <DialogTrigger as-child>
+                <button class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                  社区
+                </button>
+              </DialogTrigger>
+              <DialogContent class="sm:max-w-md">
+                <DialogHeader>
+                  <CardTitle>选择社区平台</CardTitle>
+                </DialogHeader>
+                <p class="text-sm text-muted-foreground mt-2">
+                  请选择你想加入的社区：
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                  <a
+                    href="https://www.kookapp.cn/app/invite/VZaUPP"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all hover:shadow-lg hover:shadow-black/5"
+                  >
+                    <div class="p-3 rounded-xl bg-green-500/10 text-green-600 dark:text-green-400">
+                      <MessageCircle class="size-6" />
+                    </div>
+                    <div class="text-center">
+                      <h4 class="font-semibold group-hover:text-primary transition-colors">Kook</h4>
+                      <p class="text-xs text-muted-foreground mt-1">国内社区，交流更方便</p>
+                    </div>
+                  </a>
+                  <a
+                    href="https://ets2la.com/discord"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all hover:shadow-lg hover:shadow-black/5"
+                  >
+                    <div class="p-3 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                      <MessageCircle class="size-6" />
+                    </div>
+                    <div class="text-center">
+                      <h4 class="font-semibold group-hover:text-primary transition-colors">Discord</h4>
+                      <p class="text-xs text-muted-foreground mt-1">官方社区</p>
+                    </div>
+                  </a>
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
 
           <!-- 桌面端功能按钮 -->
           <div class="hidden md:flex items-center gap-4">
             <Announcement />
             <ThemeToggle />
-            <a
-              href="https://cnb.cool/ETS2LA-CN/Euro-Truck-Simulator-2-Lane-Assist"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="国内镜像仓库"
-            >
-              <Github class="size-5" />
-            </a>
-            <a
-              href="https://github.com/ETS2LA/ETS2LA"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-muted-foreground hover:text-foreground transition-colors"
-              aria-label="GitHub"
-            >
-              <Github class="size-5" />
-            </a>
             <a
               href="https://ets2la.com/discord"
               target="_blank"
@@ -169,24 +229,98 @@ const previewImages = [
               {{ link.label }}
               <ExternalLink class="size-3" />
             </a>
-            <a
-              href="https://cnb.cool/ETS2LA-CN/Euro-Truck-Simulator-2-Lane-Assist"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
-            >
-              国内镜像仓库
-              <ExternalLink class="size-3" />
-            </a>
-            <a
-              href="https://github.com/ETS2LA/ETS2LA"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2"
-            >
-              官方 GitHub
-              <ExternalLink class="size-3" />
-            </a>
+            <Dialog>
+              <DialogTrigger as-child>
+                <button class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
+                  下载
+                  <ExternalLink class="size-3" />
+                </button>
+              </DialogTrigger>
+              <DialogContent class="sm:max-w-md">
+                <DialogHeader>
+                  <CardTitle>选择下载方式</CardTitle>
+                </DialogHeader>
+                <p class="text-sm text-muted-foreground mt-2">
+                  请选择你想使用的下载源：
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                  <a
+                    href="https://cnb.cool/ETS2LA-CN/Euro-Truck-Simulator-2-Lane-Assist/releases"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all"
+                  >
+                    <div class="p-3 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                      <Github class="size-6" />
+                    </div>
+                    <div class="text-center">
+                      <h4 class="font-semibold group-hover:text-primary transition-colors">CNB 镜像</h4>
+                      <p class="text-xs text-muted-foreground mt-1">国内镜像，下载更快</p>
+                    </div>
+                  </a>
+                  <a
+                    href="https://github.com/ETS2LA/ETS2LA/releases"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all"
+                  >
+                    <div class="p-3 rounded-xl bg-foreground/5 text-foreground">
+                      <Github class="size-6" />
+                    </div>
+                    <div class="text-center">
+                      <h4 class="font-semibold group-hover:text-primary transition-colors">GitHub</h4>
+                      <p class="text-xs text-muted-foreground mt-1">官方仓库</p>
+                    </div>
+                  </a>
+                </div>
+              </DialogContent>
+            </Dialog>
+            <Dialog>
+              <DialogTrigger as-child>
+                <button class="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2">
+                  社区
+                  <ExternalLink class="size-3" />
+                </button>
+              </DialogTrigger>
+              <DialogContent class="sm:max-w-md">
+                <DialogHeader>
+                  <CardTitle>选择社区平台</CardTitle>
+                </DialogHeader>
+                <p class="text-sm text-muted-foreground mt-2">
+                  请选择你想加入的社区：
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                  <a
+                    href="https://www.kookapp.cn/app/invite/VZaUPP"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all"
+                  >
+                    <div class="p-3 rounded-xl bg-green-500/10 text-green-600 dark:text-green-400">
+                      <MessageCircle class="size-6" />
+                    </div>
+                    <div class="text-center">
+                      <h4 class="font-semibold group-hover:text-primary transition-colors">Kook</h4>
+                      <p class="text-xs text-muted-foreground mt-1">国内社区，交流更方便</p>
+                    </div>
+                  </a>
+                  <a
+                    href="https://ets2la.com/discord"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all"
+                  >
+                    <div class="p-3 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                      <MessageCircle class="size-6" />
+                    </div>
+                    <div class="text-center">
+                      <h4 class="font-semibold group-hover:text-primary transition-colors">Discord</h4>
+                      <p class="text-xs text-muted-foreground mt-1">官方社区</p>
+                    </div>
+                  </a>
+                </div>
+              </DialogContent>
+            </Dialog>
             <div class="flex items-center gap-4 pt-4 border-t">
               <Announcement />
               <ThemeToggle />
@@ -199,15 +333,10 @@ const previewImages = [
     <!-- Hero 区域 -->
     <section class="relative z-10 mx-auto max-w-4xl px-6 py-20 text-center">
       <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-        <TextGenerateEffect words="ETS2LA C# 中文站" :class="''" />
+        <TextGenerateEffect words="ETS2LA 中文站" :class="''" />
       </h1>
-      <div class="mb-4">
-        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-sm font-medium">
-          最新版本: {{ currentVersion }}
-        </span>
-      </div>
       <p class="text-lg text-muted-foreground max-w-2xl mx-auto mb-4">
-        <TextGenerateEffect words="欢迎来到 ETS2LA C# 版本的中文站点。这是一个为 SCS 卡车模拟器带来自动驾驶技术的项目。如需前往官方站点，请" :class="''" />
+        <TextGenerateEffect words="欢迎来到 ETS2LA 的中文站点。这是一个为 SCS 卡车模拟器带来自动驾驶技术的项目。如需前往官方站点，请" :class="''" />
       </p>
       <a
         href="https://ets2la.com/"
@@ -251,16 +380,142 @@ const previewImages = [
             <path d="m12 5 7 7-7 7" />
           </svg>
         </a>
+        <Dialog>
+          <DialogTrigger as-child>
+            <div class="group relative flex items-center gap-4 p-5 rounded-2xl border bg-card text-card-foreground hover:bg-muted/50 transition-all hover:shadow-lg hover:shadow-black/5 cursor-pointer">
+              <div class="flex-1">
+                <h3 class="font-semibold mb-1 group-hover:text-primary transition-colors">下载中心</h3>
+                <p class="text-sm text-muted-foreground">使用国内镜像快速完成插件/软件的下载</p>
+              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </div>
+          </DialogTrigger>
+          <DialogContent class="sm:max-w-md">
+            <DialogHeader>
+              <CardTitle>选择下载方式</CardTitle>
+            </DialogHeader>
+            <p class="text-sm text-muted-foreground mt-2">
+              请选择你想使用的下载源：
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+              <a
+                href="https://cnb.cool/ETS2LA-CN/Euro-Truck-Simulator-2-Lane-Assist/releases"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all hover:shadow-lg hover:shadow-black/5"
+              >
+                <div class="p-3 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                  <Github class="size-6" />
+                </div>
+                <div class="text-center">
+                  <h4 class="font-semibold group-hover:text-primary transition-colors">CNB 镜像</h4>
+                  <p class="text-xs text-muted-foreground mt-1">国内镜像，下载更快</p>
+                </div>
+              </a>
+              <a
+                href="https://github.com/ETS2LA/ETS2LA/releases"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all hover:shadow-lg hover:shadow-black/5"
+              >
+                <div class="p-3 rounded-xl bg-foreground/5 text-foreground">
+                  <Github class="size-6" />
+                </div>
+                <div class="text-center">
+                  <h4 class="font-semibold group-hover:text-primary transition-colors">GitHub</h4>
+                  <p class="text-xs text-muted-foreground mt-1">官方仓库</p>
+                </div>
+              </a>
+            </div>
+          </DialogContent>
+        </Dialog>
+        <Dialog>
+          <DialogTrigger as-child>
+            <div class="group relative flex items-center gap-4 p-5 rounded-2xl border bg-card text-card-foreground hover:bg-muted/50 transition-all hover:shadow-lg hover:shadow-black/5 cursor-pointer">
+              <div class="flex-1">
+                <h3 class="font-semibold mb-1 group-hover:text-primary transition-colors">社区支持</h3>
+                <p class="text-sm text-muted-foreground">加入社区，获取帮助并分享你的想法</p>
+              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            </div>
+          </DialogTrigger>
+          <DialogContent class="sm:max-w-md">
+            <DialogHeader>
+              <CardTitle>选择社区平台</CardTitle>
+            </DialogHeader>
+            <p class="text-sm text-muted-foreground mt-2">
+              请选择你想加入的社区：
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+              <a
+                href="https://www.kookapp.cn/app/invite/VZaUPP"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all hover:shadow-lg hover:shadow-black/5"
+              >
+                <div class="p-3 rounded-xl bg-green-500/10 text-green-600 dark:text-green-400">
+                  <MessageCircle class="size-6" />
+                </div>
+                <div class="text-center">
+                  <h4 class="font-semibold group-hover:text-primary transition-colors">Kook</h4>
+                  <p class="text-xs text-muted-foreground mt-1">国内社区，交流更方便</p>
+                </div>
+              </a>
+              <a
+                href="https://ets2la.com/discord"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all hover:shadow-lg hover:shadow-black/5"
+              >
+                <div class="p-3 rounded-xl bg-indigo-500/10 text-indigo-600 dark:text-indigo-400">
+                  <MessageCircle class="size-6" />
+                </div>
+                <div class="text-center">
+                  <h4 class="font-semibold group-hover:text-primary transition-colors">Discord</h4>
+                  <p class="text-xs text-muted-foreground mt-1">官方社区</p>
+                </div>
+              </a>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </section>
 
     <!-- 更新&新闻 -->
-    <section class="relative z-10 mx-auto max-w-6xl px-6 pb-16">
+    <section v-if="false" class="relative z-10 mx-auto max-w-6xl px-6 pb-16">
       <NewsUpdate />
     </section>
 
     <!-- 界面预览画廊 -->
-    <section class="relative z-10 mx-auto max-w-6xl px-6 pb-16">
+    <section v-if="false" class="relative z-10 mx-auto max-w-6xl px-6 pb-16">
       <div class="rounded-3xl border bg-card overflow-hidden">
         <div class="px-6 py-4 border-b bg-muted/30">
           <h2 class="text-xl font-semibold">界面预览</h2>

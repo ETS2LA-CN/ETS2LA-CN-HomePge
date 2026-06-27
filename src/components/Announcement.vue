@@ -6,8 +6,8 @@ import { motion, AnimatePresence } from 'motion-v'
 // 公告内容
 const announcement = {
   title: '最新公告',
-  content: '因未完成雨云赞助计划需求，雨云赞助的服务器已到期，可视化已切换回原服务器并开启限速，如果您仍然希望获得更快的访问速度请为 ETS2LA国内镜像站提供者 晚安（QQ：1804832964） 进行赞助（请备注赞助目的、所在省份以及联系方式），晚安将会单独从阿里云给你开一台机器（电信/联通/移动三线峰值 200mbps= 25MB/s）并使用特定域名供你访问。',
-  date: '2026-04-10',
+  content: 'ETS2LA C# 已于2026年6月27日正式开启测试，测试版内容仍存在诸多bug，如遇bug请即使前往 <a href="https://ets2la.com/discord" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Discord</a> 中的 帮助-幫助 频道进行反馈',
+  date: '2026-06-28',
 }
 
 const isVisible = ref(false)
@@ -83,9 +83,7 @@ onMounted(() => {
             
             <div class="space-y-4">
               <div class="max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
-                <p class="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                  {{ announcement.content }}
-                </p>
+                <p class="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap" v-html="announcement.content"></p>
               </div>
               <div class="flex items-center justify-between pt-3 border-t border-border/50">
                 <span class="text-[10px] text-muted-foreground/70 font-medium uppercase tracking-widest">
