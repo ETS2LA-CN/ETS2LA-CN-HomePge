@@ -21,9 +21,6 @@ const preferredDark = usePreferredDark()
 const isDark = computed(() => mode.value === 'dark' || (mode.value === 'auto' && preferredDark.value))
 const imgBase = computed(() => (isDark.value ? '/show/flip_card/black' : '/show/flip_card/white'))
 
-// 当前版本信息
-const currentVersion = 'ETS2LA C# v3.4.13'
-
 // 导航链接
 const navLinks = [
   { label: '文档', href: 'https://docs.ets2la.cn/version/v3/', external: true },
