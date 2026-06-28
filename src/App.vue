@@ -242,7 +242,7 @@ const previewImages = [
                 </p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
                   <a
-                    href="https://cnb.cool/ETS2LA-CN/Euro-Truck-Simulator-2-Lane-Assist/releases"
+                    href="https://cnb.cool/ETS2LA-CN/Euro-Truck-Simulator-2-Lane-Assist/-/releases/latest"
                     target="_blank"
                     rel="noopener noreferrer"
                     class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all"
@@ -410,7 +410,7 @@ const previewImages = [
             </p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
               <a
-                href="https://cnb.cool/ETS2LA-CN/Euro-Truck-Simulator-2-Lane-Assist/releases"
+                href="https://cnb.cool/ETS2LA-CN/Euro-Truck-Simulator-2-Lane-Assist/-/releases/latest"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="group flex flex-col items-center gap-3 p-5 rounded-xl border bg-card hover:bg-muted/50 transition-all hover:shadow-lg hover:shadow-black/5"
