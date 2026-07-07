@@ -23,7 +23,7 @@ const imgBase = computed(() => (isDark.value ? '/show/flip_card/black' : '/show/
 
 // 导航链接
 const navLinks = [
-  { label: '文档', href: 'https://docs.ets2la.cn/version/v3/', external: true },
+  { label: '文档', href: 'https://docs.ets2la.cn/version/v3/docs', external: true },
 ]
 
 // 功能卡片数据
@@ -31,7 +31,7 @@ const featureCards = [
   {
     title: '快速上手',
     description: '查看文档并在数分钟内完成插件/软件的安装',
-    href: 'https://docs.ets2la.cn/version/v3',
+    href: 'https://docs.ets2la.cn/version/v3/docs',
   },
 ]
 
