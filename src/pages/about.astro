@@ -1,0 +1,10 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { links } from '../config/links';
+---
+<Layout title="关于 ETS2LA CN - 官方社区镜像" description="了解 ETS2LA CN 的定位、国内资源与官方社区镜像信息。" path="/about/">
+  <section class="page-hero"><div class="container"><span class="eyebrow">ABOUT / 03</span><h1>一个更近的<br /><em>ETS2LA 入口。</em></h1><p>ETS2LA CN 是面向中国用户的官方社区镜像与资源门户，聚合国内代码镜像、中文文档、社区入口和官方资源。</p></div></section>
+  <section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">WHY THIS SITE</span><h2>我们负责导航，不重新造一套文档。</h2></div></div><div class="link-list"><div class="link-card"><div><span class="eyebrow">01 / MIRROR</span><h3>优先呈现国内入口</h3><p>为中国用户把 CNB、中文文档和 KOOK 放到更容易找到的位置。</p></div></div><div class="link-card"><div><span class="eyebrow">02 / CLARITY</span><h3>明确区分官方资源</h3><p>所有官方链接都会清楚标记，方便你回到项目源头。</p></div></div></div></div></section>
+  <section class="section"><div class="container"><div class="notice"><strong>官方社区镜像声明：</strong> ETS2LA CN 是面向中国用户的官方社区镜像与资源导航站点，已获得 ETS2LA 官方授权。ETS2LA 项目的相关商标、代码和内容版权归其相应权利人所有。</div></div></section>
+  <section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">PROJECT SOURCES</span><h2>从这里回到项目源头。</h2></div></div><div class="link-list"><a class="link-card" href={links.official.github} target="_blank" rel="noreferrer"><div><span class="eyebrow">OFFICIAL / GITHUB</span><h3>ETS2LA 官方 GitHub</h3><p>查看源代码、Issue 与项目贡献信息。</p></div><span class="arrow">↗</span></a><a class="link-card" href={links.china.cnb} target="_blank" rel="noreferrer"><div><span class="eyebrow">CHINA / CNB</span><h3>ETS2LA 国内代码镜像</h3><p>面向中国用户的镜像入口。</p></div><span class="arrow">↗</span></a></div></div></section>
+</Layout>

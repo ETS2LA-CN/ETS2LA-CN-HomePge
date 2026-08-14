@@ -1,0 +1,16 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { links } from '../config/links';
+const items = [
+  ['01', '先了解项目', '从官方项目说明开始，建立对 ETS2LA 的基本认识。', links.official.github, '查看 GitHub'],
+  ['02', '阅读中文文档', '中文文档是使用、安装和排查问题的优先入口。', links.china.docs, '打开文档'],
+  ['03', '获取项目代码', '中国用户可优先访问 CNB 镜像获取项目。', links.china.cnb, '访问 CNB'],
+  ['04', '安装并运行', '根据项目文档中的当前说明完成配置，不在此重复维护安装步骤。', links.china.docs, '查看指南'],
+  ['05', '加入社区', '和其他玩家、使用者及开发者交流体验与问题。', links.china.kook, '加入 KOOK'],
+];
+---
+<Layout title="快速开始 - ETS2LA CN" description="从中文文档、国内代码镜像和社区开始了解 ETS2LA。" path="/start/">
+  <section class="page-hero"><div class="container"><span class="eyebrow">START HERE / 01</span><h1>准备好，<br /><em>开始你的第一段路。</em></h1><p>这里提供最短的项目导航。具体安装和使用细节请以官方项目及中文文档的最新内容为准。</p></div></section>
+  <section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">A SIMPLE ROUTE</span><h2>从了解，到上路。</h2></div></div><div class="steps">{items.map(([no, title, text, href, label]) => <div class="step"><span class="step-no">{no}</span><h3>{title}</h3><p>{text}</p><a class="text-link" href={href} target="_blank" rel="noreferrer">{label} ↗</a></div>)}</div></div></section>
+  <section class="section"><div class="container"><div class="notice"><strong>提示：</strong> ETS2LA CN 是社区维护的资源导航站点，不替代官方项目文档。版本、系统要求与安装方式可能随项目更新，请以链接目标中的最新说明为准。</div></div></section>
+</Layout>

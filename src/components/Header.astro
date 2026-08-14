@@ -1,0 +1,13 @@
+---
+import { links } from '../config/links';
+---
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="/" aria-label="ETS2LA CN 首页"><img class="brand-mark" src="/image/ets2la-cn-ban.png" alt="ETS2LA CN" /><span>ETS2LA CN<small>COMMUNITY MIRROR</small></span></a>
+    <nav class="nav-links" aria-label="主导航">
+      <a href="/">首页</a><a href="/start/">快速开始</a><a href="/community/">社区</a><a href="/about/">关于</a>
+    </nav>
+    <div class="nav-actions"><a class="button secondary" href={links.china.cnb} target="_blank" rel="noreferrer">国内镜像 ↗</a><a class="button" href={links.official.github} target="_blank" rel="noreferrer">GitHub ↗</a></div>
+    <button class="mobile-toggle" aria-label="打开导航" aria-expanded="false">☰</button>
+  </div>
+</header>

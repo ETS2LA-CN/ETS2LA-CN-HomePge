@@ -1,0 +1,42 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+
+interface Props { title?: string; description?: string; path?: string; }
+const { title = 'ETS2LA CN - ETS2LA 中国镜像与社区', description = 'ETS2LA 中国镜像与社区门户，为中国用户提供国内代码镜像、中文文档、KOOK 社区以及官方资源导航。', path = '' } = Astro.props;
+const canonical = `https://ets2la.cn${path}`;
+---
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="keywords" content="ETS2LA, ETS2LA CN, Euro Truck Simulator 2 Lane Assist, 欧洲卡车模拟2, 欧卡2, ETS2 辅助驾驶, ETS2LA 中文" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/x-icon" href="/image/ets2la-jian.ico" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="zh_CN" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <Header />
+    <main><slot /></main>
+    <Footer />
+    <script>
+      const nav = document.querySelector('.nav');
+      const toggle = document.querySelector('.mobile-toggle');
+      toggle?.addEventListener('click', () => {
+        nav?.classList.toggle('is-open');
+        toggle?.setAttribute('aria-expanded', String(nav?.classList.contains('is-open')));
+      });
+    </script>
+  </body>
+</html>

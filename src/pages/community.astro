@@ -1,0 +1,9 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { links } from '../config/links';
+---
+<Layout title="社区 - ETS2LA CN" description="加入 ETS2LA 国内 KOOK 社区或官方 Discord 社区。" path="/community/">
+  <section class="page-hero"><div class="container"><span class="eyebrow">COMMUNITY / 02</span><h1>有人同行，<br /><em>路上就不孤单。</em></h1><p>遇到问题、发现 Bug、交流使用体验，或者参与项目开发，都可以找到合适的社区入口。</p></div></section>
+  <section class="section"><div class="container"><div class="section-head"><div><span class="eyebrow">CHOOSE YOUR ROUTE</span><h2>两个社区，清晰区分。</h2></div></div><div class="link-list"><a class="link-card" href={links.china.kook} target="_blank" rel="noreferrer"><div><span class="eyebrow">中国社区 / KOOK</span><h3>加入 ETS2LA 国内社区</h3><p>使用中文交流，连接中国玩家与开发者。</p></div><span class="arrow">↗</span></a><a class="link-card" href={links.official.discord} target="_blank" rel="noreferrer"><div><span class="eyebrow">官方社区 / DISCORD</span><h3>加入官方 Discord</h3><p>前往 ETS2LA 官方社区参与讨论。</p></div><span class="arrow">↗</span></a></div></div></section>
+  <section class="section"><div class="container cn-zone"><span class="eyebrow">COMMUNITY NOTES</span><h2>友善交流，尊重开源。</h2><p class="section-intro">社区是了解项目进展、反馈使用问题和分享经验的地方。请遵守各社区的规则，并在提问时尽可能提供清晰的上下文。</p></div></section>
+</Layout>

@@ -1,0 +1,5 @@
+---
+interface Props { eyebrow: string; title: string; description: string; href: string; label: string; primary?: boolean; }
+const { eyebrow, title, description, href, label, primary = false } = Astro.props;
+---
+<article class:list={['resource', { primary }]}><div><span class="eyebrow">{eyebrow}</span><h3>{title}</h3><p>{description}</p></div><a class="button" href={href} target="_blank" rel="noreferrer">{label} ↗</a></article>
