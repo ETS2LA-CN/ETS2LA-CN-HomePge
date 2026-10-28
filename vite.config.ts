@@ -1,6 +1,6 @@
 import { defineConfig, type Plugin } from "vite";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
-import { onRequestGet } from "./functions/api/status.js";
+import { onRequestGet } from "./edge-functions/api/status.js";
 
 const statusApi = {
   name: "status-api",
