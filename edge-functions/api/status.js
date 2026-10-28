@@ -6,6 +6,16 @@ const MONITOR_TAGS = [
 const REQUEST_TIMEOUT = 8000;
 const EVENT_WINDOW = 90 * 24 * 60 * 60;
 
+function jsonResponse(data, init = {}) {
+  return new Response(JSON.stringify(data), {
+    ...init,
+    headers: {
+      "Content-Type": "application/json; charset=utf-8",
+      ...init.headers,
+    },
+  });
+}
+
 async function fetchJson(path, init = {}) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
@@ -42,7 +52,7 @@ export async function onRequestGet() {
       }),
     ]);
 
-    return Response.json(
+    return jsonResponse(
       {
         ...monitors,
         incidents: events.incidents ?? [],
@@ -56,8 +66,9 @@ export async function onRequestGet() {
         },
       },
     );
-  } catch {
-    return Response.json(
+  } catch (error) {
+    console.error("Kener status request failed", error);
+    return jsonResponse(
       {
         error: "UPSTREAM_UNAVAILABLE",
         message: "暂时无法获取服务状态，请稍后重试。",
