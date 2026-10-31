@@ -12,10 +12,9 @@
 
   type Props = {
     monitor: Monitor;
-    tag: string;
   };
 
-  let { monitor, tag }: Props = $props();
+  let { monitor }: Props = $props();
 
   function statusClass(status: string) {
     return status.toLowerCase().replaceAll("_", "-");
@@ -52,7 +51,7 @@
     <div class="history-label"><span>{monitor.uptimeData.length > 0 ? formatDay(monitor.uptimeData[0].ts) : ""}</span><span>今天</span></div>
   </div>
 
-  <a class="monitor-link" href={`${STATUS_PAGE_URL}/monitors/${tag}`} target="_blank" rel="noreferrer">
+  <a class="monitor-link" href={STATUS_PAGE_URL} target="_blank" rel="noreferrer">
     查看监控详情<ArrowUpRight size={16} weight="bold" />
   </a>
 </article>

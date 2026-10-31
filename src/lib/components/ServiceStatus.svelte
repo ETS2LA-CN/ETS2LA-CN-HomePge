@@ -173,8 +173,8 @@
       {/if}
 
       <div class="monitor-grid">
-        {#each monitors as monitor, index}
-          <MonitorCard {monitor} tag={MONITOR_TAGS[index]} />
+        {#each monitors as monitor}
+          <MonitorCard {monitor} />
         {/each}
       </div>
 

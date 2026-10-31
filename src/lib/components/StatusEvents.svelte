@@ -62,7 +62,7 @@
         {#if affectedMonitors && affectedMonitors.length > 0}
           <p class="event-scope">影响服务：{affectedMonitors.map((monitor) => monitor.monitor_name).join("、")}</p>
         {/if}
-        <a href={`${STATUS_PAGE_URL}/${event.kind === "incident" ? "incidents" : "maintenances"}/${event.id}`} target="_blank" rel="noreferrer">
+        <a href={STATUS_PAGE_URL} target="_blank" rel="noreferrer">
           查看事件详情<ArrowUpRight size={16} weight="bold" />
         </a>
       </article>
