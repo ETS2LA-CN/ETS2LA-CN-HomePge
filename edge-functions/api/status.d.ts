@@ -1,1 +1,3 @@
-export function onRequestGet(): Promise<Response>;
+export function onRequestGet(context?: {
+  env?: Record<string, string | undefined>;
+}): Promise<Response>;

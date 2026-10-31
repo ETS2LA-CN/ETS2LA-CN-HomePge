@@ -1,10 +1,17 @@
-const KENER_ORIGIN = "https://status.ets2la.cn";
+const DEFAULT_KENER_ORIGIN = "https://status.ets2la.cn";
 const MONITOR_TAGS = [
   "ets2la-cn-c-backed-zong",
   "ets2la-cn-c-plugins-downloads",
 ];
 const REQUEST_TIMEOUT = 8000;
 const EVENT_WINDOW = 90 * 24 * 60 * 60;
+
+function getKenerOrigin(env) {
+  const configured =
+    env?.KENER_ORIGIN ??
+    (typeof process !== "undefined" ? process.env.KENER_ORIGIN : undefined);
+  return (configured || DEFAULT_KENER_ORIGIN).replace(/\/+$/, "");
+}
 
 function jsonResponse(data, init = {}) {
   return new Response(JSON.stringify(data), {
@@ -16,11 +23,11 @@ function jsonResponse(data, init = {}) {
   });
 }
 
-async function fetchJson(path, init = {}) {
+async function fetchJson(origin, path, init = {}) {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT);
   try {
-    const response = await fetch(`${KENER_ORIGIN}${path}`, {
+    const response = await fetch(`${origin}${path}`, {
       ...init,
       signal: controller.signal,
       headers: {
@@ -35,14 +42,15 @@ async function fetchJson(path, init = {}) {
   }
 }
 
-export async function onRequestGet() {
+export async function onRequestGet({ env } = {}) {
+  const kenerOrigin = getKenerOrigin(env);
   const endTimestamp = Math.floor(Date.now() / 1000);
   const monitorPath = `/dashboard-apis/monitor-bars?tags=${MONITOR_TAGS.join(",")}&days=30`;
 
   try {
     const [monitors, events] = await Promise.all([
-      fetchJson(monitorPath),
-      fetchJson("/dashboard-apis/events-by-month", {
+      fetchJson(kenerOrigin, monitorPath),
+      fetchJson(kenerOrigin, "/dashboard-apis/events-by-month", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
